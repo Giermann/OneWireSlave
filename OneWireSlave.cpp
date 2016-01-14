@@ -1,7 +1,7 @@
 /*
 OneWireSlave v1.1 by Joshua Fuller - Modified based on versions noted below for Digispark
 
-OneWireSlave v1.0 by Alexander Gordeyev
+OneWireSlave v1.0 by Alexander Gordeyev - http://robocraft.ru/blog/arduino/302.html
 
 It is based on Jim's Studt OneWire library v2.0
 
