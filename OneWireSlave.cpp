@@ -479,12 +479,13 @@ bool OneWireSlave::presence(uint8_t delta) {
   // to the 480 standard spec and the 490 used on the Arduino master code
   // anything longer then is most likely something going wrong.
   uint8_t retries = 25;
-  while (!DIRECT_READ(reg, mask));
-  do {
-	if ( retries-- == 0)
-		//return FALSE;
-	delayMicroseconds(2); 
-  } while(!DIRECT_READ(reg, mask));
+  while (!DIRECT_READ(reg, mask)) {
+    if ( retries-- == 0) {
+      errno = ONEWIRE_PRESENCE_LOW_ON_LINE;
+      return FALSE;
+    }
+    delayMicroseconds(2); 
+  }
   /*
   if ( !DIRECT_READ(reg, mask)) {
       errno = ONEWIRE_PRESENCE_LOW_ON_LINE;
@@ -492,6 +493,7 @@ bool OneWireSlave::presence(uint8_t delta) {
   } else
       return TRUE;
   */
+  return TRUE;
 }
 bool OneWireSlave::presence() {
   return presence(25);
@@ -612,7 +614,7 @@ uint8_t OneWireSlave::waitTimeSlot() {
           
   //Wait for a fall form 1 to 0 on the line for timeout duration
   retries = TIMESLOT_WAIT_RETRY_COUNT;
-  while ( DIRECT_READ(reg, mask));
+  while ( DIRECT_READ(reg, mask))
     if (--retries == 0)
       return 20;
 
@@ -644,7 +646,7 @@ uint8_t OneWireSlave::waitTimeSlotRead() {
           
   //Wait for a fall form 1 to 0 on the line for timeout duration
   retries = TIMESLOT_WAIT_READ_RETRY_COUNT;
-  while ( DIRECT_READ(reg, mask));
+  while ( DIRECT_READ(reg, mask))
     if (--retries == 0)
       return 20;
 
